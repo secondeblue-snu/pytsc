@@ -1,4 +1,4 @@
-# pytsc
+# PyTSC
 The Educational TSC Toolset in Python
 
 ## License
