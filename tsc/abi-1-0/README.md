@@ -17,9 +17,10 @@ The instructions and notation are defined in
 1. [Assembly language](#1-assembly-language)
 2. [Assembler directives](#2-assembler-directives)
 3. [Pseudo-instructions](#3-pseudo-instructions)
-4. [Procedure calls](#4-procedure-calls)
-5. [Binary file format](#5-binary-file-format)
-6. [Example program](#6-example-program)
+4. [Memory map](#4-memory-map)
+5. [Procedure calls](#5-procedure-calls)
+6. [Binary file format](#6-binary-file-format)
+7. [Example program](#7-example-program)
 
 ---
 
@@ -88,7 +89,43 @@ LAD $1, 0xBEEF      ; 61BE   LHI $1, 0xBE
                     ; 55EF   ORI $1, $1, 0xEF
 ```
 
-## 4. Procedure calls
+## 4. Memory map
+
+The course divides the 65,536-word address space as follows:
+
+| Addresses | Use |
+|---|---|
+| `0x0000`–`0x7FFF` | Programs and data. Programs normally start at `0x0000`. |
+| `0x7FFF` | Base of the stack. See [Procedure calls](#5-procedure-calls). |
+| `0x8000`–`0xFFFF` | Reserved for memory-mapped devices and system routines. Programs must not place code or data here. |
+| `0xEEEE`–`0xEEF3` | Calculator device registers. See below. |
+| `0xFFF5`–`0xFFFF` | The loader. See [Binary file format](#6-binary-file-format). |
+
+### Memory-mapped devices
+
+The only I/O instructions in TSC are `RWD` and `WWD`. A memory-mapped device
+is reached with ordinary `LWD` and `SWD` instead: reading or writing one of
+its addresses accesses a device register, not memory.
+
+The course simulator provides one such device, a four-function calculator.
+Its six registers are:
+
+| Address | Register | Written by | Contents |
+|---|---|---|---|
+| `0xEEEE` | Left operand | calculator | operand |
+| `0xEEEF` | Right operand | calculator | operand |
+| `0xEEF0` | Operator | calculator | `0x0001` add, `0x0002` subtract, `0x0004` multiply, `0x0008` divide |
+| `0xEEF1` | Result | program | result |
+| `0xEEF2` | Operation status | both | `0x0001`: an operation is waiting; `0x0000`: the result is ready |
+| `0xEEF3` | Power | calculator | `0x0001`: on; `0x0000`: off |
+
+A program polls `0xEEF2`. When it reads `0x0001`, the program reads the
+operands and the operator, writes the result to `0xEEF1`, and then writes
+`0x0000` to `0xEEF2`. While no operation is waiting, the program checks
+`0xEEF3` and stops once the calculator is turned off. Division is integer
+division.
+
+## 5. Procedure calls
 
 The hardware provides two call instructions and one return instruction:
 
@@ -98,17 +135,36 @@ The hardware provides two call instructions and one return instruction:
 | Call | [`JRL $rs`](../isa-1-0/README.md#jrl--jump-register-and-link) | Any address (load it with `LAD` first) |
 | Return | [`JPR $2`](../isa-1-0/README.md#jpr--jump-register) | Any address |
 
-Both call instructions write the return address to `$2`, so `$2` serves as
-the link register. A procedure that makes a call of its own must save `$2`
-before the call and restore it afterwards.
+The course defines the following convention:
 
-> [!NOTE]
-> TSC 1.0 defines nothing beyond the link register. There is no stack
-> pointer, no rule for passing arguments or results, and no division into
-> caller-saved and callee-saved registers. Each program documents its own
-> conventions.
+| Item | Convention |
+|---|---|
+| Return address | `$2`, written by `JAL` or `JRL` |
+| Stack pointer | `$3` |
+| Arguments | Pushed onto the stack by the caller |
+| Return value | `$0` |
+| Temporary storage | On the stack |
 
-## 5. Binary file format
+The stack starts at `0x7FFF` and grows toward `0x0000`. The stack pointer
+points to the top element, or to `0x7FFF` when the stack is empty. A push
+decrements the stack pointer and then stores; a pop loads and then
+increments:
+
+```asm
+* Push $1
+        ADI   $3, $3, -1
+        SWD   $1, $3, 0
+* Pop into $1
+        LWD   $1, $3, 0
+        ADI   $3, $3, 1
+```
+
+A procedure pushes `$2` on entry, so that it can make calls of its own, and
+restores it before returning with `JPR $2`. Every procedure that uses the
+stack must leave the stack pointer correct. The convention does not say
+which other registers a procedure must preserve.
+
+## 6. Binary file format
 
 The assembler writes a binary file of 16-bit words. The file holds one or
 more segments, one per `.ORG`.
@@ -125,7 +181,10 @@ A loader reads the segment count first. For each segment it reads the start
 address and the length, then copies that many words into memory starting
 at that address.
 
-## 6. Example program
+The course loader is an 11-word TSC program at `0xFFF5`–`0xFFFF`. It reads
+the file from the input port with `RWD` and stores each word with `SWD`.
+
+## 7. Example program
 
 This program adds up a five-element table and sends the sum to the output
 port.

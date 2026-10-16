@@ -404,16 +404,20 @@ BLZ $0, 2           ; 3002   if $0 < 0, skip the next 2 words
 `JMP` and `JAL` take a 12-bit target. They keep the top four bits of the
 program counter and replace the other twelve with the target:
 
+```
+PC ← (PC + 1)[15:12] ‖ target
+```
+
 As a result, `JMP` and `JAL` can only reach addresses inside the current
 4,096-word region of memory. To reach any address, load it into a register
 (see [`LAD`](../abi-1-0/README.md#lad--load-address)) and use `JPR` or `JRL`.
 
 > [!NOTE]
-> The original documentation is inconsistent here. Its prose takes the top
-> four bits from the jump instruction's own address (`PC[15:12]`), while its
-> formal operation takes them from the incremented PC (`(PC + 1)[15:12]`).
-> The two differ only for a jump in the last word of a 4,096-word region,
-> such as `0x0FFF`.
+> The original prose takes the top four bits from the jump instruction's
+> own address (`PC[15:12]`). The original formal operation and microprogram
+> take them after the PC has been incremented (`(PC + 1)[15:12]`), and this
+> document follows them. The two differ only for a jump in the last word of
+> a 4,096-word region, such as `0x0FFF`.
 
 ### JMP — Jump
 
@@ -468,8 +472,9 @@ JRL $1              ; F41A   $2 ← return address, PC ← $1
 ```
 
 > [!NOTE]
-> The original documentation leaves open what `JRL $2` does. In that case
-> `$2` is both the jump target and the link register.
+> `JRL` writes `$2` before it jumps, as the original microprogram does. As a
+> result, `JRL $2` jumps to the next instruction and only sets `$2` to
+> `PC + 1`.
 
 ### HLT — Halt
 
