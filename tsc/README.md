@@ -24,6 +24,18 @@ To keep it simple enough to be built in one semester, TSC was designed as:
 - a nine-function ALU and a microprogrammed control unit
 - one I/O port accessed by dedicated instructions (`RWD`, `WWD`)
 
+## Documentation
+
+Version 1.0 describes TSC as defined in the original BYU CS 143 course
+materials. Both documents were compiled and reorganized from those
+materials.
+
+- [TSC ISA 1.0](isa-1-0/README.md): machine overview, instruction formats,
+  opcodes and function codes, and the operation and encoding of each
+  instruction.
+- [TSC ABI 1.0](abi-1-0/README.md): assembly language, assembler directives,
+  pseudo-instructions, procedure calls, and the binary file format.
+
 ## Reference
 
 J. Penfold and J. K. Flanagan, "A First Year Computer Organization Course on
