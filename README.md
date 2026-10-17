@@ -30,6 +30,13 @@ The assembler is a minimal tool for small test programs: it supports only
 a few directives (`.ORG`, `.BSC`, `.BSS`, `.END`) and does only limited
 error checking. It is not a full-featured assembler.
 
+## TSC Projects
+
+The following repositories illustrate how TSC has been used in CPU design
+courses, from introductory single-cycle implementations to pipelined
+processors with caches and DMA. They also include related assembly and
+simulation exercises.
+
 ## License
 PyTSC is distributed under the BSD 3-Clause License. See [LICENSE](LICENSE).
 
