@@ -15,7 +15,7 @@ copyright notice.
 
 The PyTSC toolset requires Python version 3.9 or higher. In addition, the
 PyTSC toolset depends on Python modules such as `numpy` and `pyelftools`.
-These modules can be installed on Ubuntu 22.04LTS as follows:
+These modules can be installed on Ubuntu 22.04 LTS as follows:
 
 ```
 $ sudo apt-get install python3-numpy python3-pyelftools
