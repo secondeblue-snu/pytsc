@@ -34,12 +34,13 @@ error checking. It is not a full-featured assembler.
 
 Beyond its original course at BYU, TSC has been used in computer organization and computer architecture courses at other universities, where students implement TSC processors in Verilog or Logisim.
 
-The following public repositories (22 in total) show how TSC has been taught and used:
+The following public repositories (23 in total) show how TSC has been taught and used:
 
 * [kssteven418/snuece_architecture](https://github.com/kssteven418/snuece_architecture) (2017): Vivado projects for a single-cycle CPU, a pipelined CPU, a cache, and DMA
 * [iamggyu/2018_spring](https://github.com/iamggyu/2018_spring/tree/master/Computer%20Organization_001) (2018): Course materials, including the lab handout and skeleton code for a single-cycle TSC CPU
 * [hansungk/tsc-cpu](https://github.com/hansungk/tsc-cpu) (2018): Multi-cycle and pipelined CPUs with data forwarding and selectable branch predictors, a cache, and DMA with cycle stealing, with lab reports
 * [seunghyukcho/pipelined-cpu-verilog](https://github.com/seunghyukcho/pipelined-cpu-verilog) (2019): A pipelined CPU, with the benchmark program used to test it
+* [jaywonchung/Verilog-Harvard-CPU](https://github.com/jaywonchung/Verilog-Harvard-CPU) (2019): Ten CPUs built on one another, from single-cycle and multi-cycle CPUs to pipelined CPUs with data forwarding, 2-bit saturating and tournament branch predictors, slow memory, instruction and data caches, and DMA with cycle stealing, each with a design document
 * [Zeta611/cpu-design](https://github.com/Zeta611/cpu-design) (2019): A TSC CPU running on a Spartan-3E FPGA board, displaying register values on an LCD and LEDs
 * [HamHyungkyu/csed311-labs](https://github.com/HamHyungkyu/csed311-labs) (2020): Single-cycle, multi-cycle, and pipelined CPUs, followed by a pipelined CPU with a BTB-based branch predictor and data forwarding, a 2-way set-associative cache, and DMA
 * [sjyoopostech/source_CSED311](https://github.com/sjyoopostech/source_CSED311) (2020): Single-cycle, multi-cycle, and pipelined CPUs, a cache compared against a no-cache baseline, and DMA
@@ -58,6 +59,8 @@ The following public repositories (22 in total) show how TSC has been taught and
 * [GalacticLearner/perceptron-branch-predictor](https://github.com/GalacticLearner/perceptron-branch-predictor) (2026): A perceptron branch predictor added to a pipelined TSC CPU, built to measure the hardware and cycle overhead of the predictor
 * [dyp0122/Proj3_CA](https://github.com/dyp0122/Proj3_CA) (2026): A single-cycle CPU for the same TSC subset
 * [emmalee0913/proj-3](https://github.com/emmalee0913/proj-3) (2026): A single-cycle CPU for the same TSC subset
+
+TSC designs also appear in hardware datasets. [ChiBench](https://github.com/lac-dcc/chimera), a collection of Verilog programs mined from GitHub for testing EDA tools, includes modules from jaywonchung/Verilog-Harvard-CPU, and [ChipBench](https://github.com/zhongkaiyu/ChipBench), a benchmark for LLM-based Verilog generation, includes a TSC CPU as one of its problems.
 
 ## License
 PyTSC is distributed under the BSD 3-Clause License. See [LICENSE](LICENSE).
