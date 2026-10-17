@@ -6,7 +6,7 @@ The Educational TSC Toolset in Python
 
 ## About TSC
 TSC is an educational 16-bit processor originally designed by Jeff Penfold
-and J. Kelly Flanagan at Brigham Young University.
+and J. Kelly Flanagan at Brigham Young University, circa 2000.
 The original TSC course materials are copyrighted by their authors.
 See [tsc/README.md](tsc/README.md) for its origin, references, and
 copyright notice.
@@ -15,6 +15,7 @@ copyright notice.
 
 The PyTSC toolset requires Python version 3.9 or higher. In addition, the
 PyTSC toolset depends on Python modules such as `numpy` and `pyelftools`.
+
 These modules can be installed on Ubuntu 22.04 LTS as follows:
 
 ```
